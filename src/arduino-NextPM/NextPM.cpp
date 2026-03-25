@@ -21,7 +21,7 @@ void NextPM::emptyBuffer()
 void NextPM::configure()
 {
 	Serial.write("configured");
-	hstream->begin(NEXTPM_BAUD,SERIAL_8E1);
+	//hstream->begin(NEXTPM_BAUD,SERIAL_8E1);
 }
 
 bool NextPM::shutdown()
@@ -121,7 +121,7 @@ bool NextPM::read_5min(PM_DATA & data){
 
 bool NextPM::read(PM_DATA & data)
 {
-	Serial.println("cousou");
+	//Serial.println("cousou");
 /*	byte message1 [] = {0x7E, 0x00, 0x03, 0x00, 0xFC, 0x7E};
 	this->hstream->write(message1, sizeof(message1));
 	delay(NEXT_PM_COMMAND_DELAY);
@@ -130,7 +130,7 @@ bool NextPM::read(PM_DATA & data)
 		this->transcodeData(data);
 		return true;
 	}*/
-	return false;
+	return read_1min(data);
 }
 
 
@@ -162,9 +162,9 @@ bool NextPM::readTempHumi(float & temp, float & humidity)
 	return false;
 }
 
-NextPM::NextPM(HardwareSerial& s): PM_Sensor(s)
+NextPM::NextPM(Stream& s): PM_Sensor(s)
 {
-	this->hstream = &s;
+	//this->hstream = &s;
 	converter.array[0]=0;
 	converter.array[1]=0;
 	converter.array[2]=0;

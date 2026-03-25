@@ -4,6 +4,7 @@
  *	(c) Copyright © 2019, 2020, 2021, IRD & Université de Bourgogne
  *  Created on: Sep 6, 2020
  *      Author: Nicolas Marilleau
+ *    
  */
 
 
@@ -11,8 +12,6 @@
 #ifndef PM_SENSOR_H
 #define PM_SENSOR_H
 
-#include <SoftwareSerial.h>
-#include "HardwareSerial.h"
 #include "Stream.h"
 
 
@@ -33,22 +32,24 @@ class PM_Sensor
 {
 public:
 
+  virtual void configure() = 0;
+  virtual bool shutdown() = 0;
+  virtual bool powerOn() = 0;
+  virtual bool read(PM_DATA &) = 0;
+  virtual void cleanSensor() = 0;
 
-  virtual void configure();
-  virtual bool shutdown();
-  virtual bool powerOn();
-  virtual bool read(PM_DATA &);
-  virtual void cleanSensor();
-  bool read_1min(PM_DATA & data);
-  bool read_10sec(PM_DATA & data);
-  bool read_5min(PM_DATA & data);
-  PM_DATA readDuring(long delay);
+  virtual bool read_1min(PM_DATA & ) = 0;
+  virtual bool read_10sec(PM_DATA & ) = 0;
+  virtual bool read_5min(PM_DATA & ) = 0;
 
-  PM_Sensor(HardwareSerial & );
-  PM_Sensor(SoftwareSerial & );
+  //PM_DATA readDuring(long delay);
+
+  PM_Sensor(Stream & );
+
+  virtual ~PM_Sensor() = default;
 
 protected:
-  HardwareSerial* hstream;
+  Stream* hstream;
 
 };
-#endif
+#endif // PM_Sensor

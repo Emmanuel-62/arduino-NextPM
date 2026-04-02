@@ -17,73 +17,73 @@
 class NextPM : public PM_Sensor
 {
 
-public:
-	enum CommandResponse
-	{
-		TIME_OUT_ERROR,
-		CRC_ERROR,
-		TH_MEASURE,
-		PM_MEASURE,
-		START_MEASURE,
-		STOP_MEASURE,
-		SENSOR_STATE
-	};
+	public:
+		enum CommandResponse
+		{
+			TIME_OUT_ERROR,
+			CRC_ERROR,
+			TH_MEASURE,
+			PM_MEASURE,
+			START_MEASURE,
+			STOP_MEASURE,
+			SENSOR_STATE
+		};
 
-	union ArrayTo32BInteger
-	{
-		byte array[4];
-		uint32_t integer;
-	};
+		union ArrayTo32BInteger
+		{
+			byte array[4];
+			uint32_t integer;
+		};
 
-	union ArrayTo16BInteger
-	{
-		byte array[2];
-		unsigned int integer;
-	};
+		union ArrayTo16BInteger
+		{
+			byte array[2];
+			unsigned int integer;
+		};
 
-	void configure();
-	bool shutdown();
-	bool powerOn();
-	bool read_1min(PM_DATA &data);
-	bool read_10sec(PM_DATA &data);
-	bool read_5min(PM_DATA &data);
-	bool isActive();
-	bool isSleeping();
-	bool read(PM_DATA &data);
-	bool readTempHumi(float &temp, float &humidity);
-	void cleanSensor();
-	void readSTATE(byte *data, int ml);
+		void configure();
+		bool shutdown();
+		bool powerOn();
+		bool read_1min(PM_DATA &data);
+		bool read_10sec(PM_DATA &data);
+		bool read_5min(PM_DATA &data);
+		bool isActive();
+		bool isSleeping();
+		bool read(PM_DATA &data);
+		bool readTempHumi(float &temp, float &humidity);
+		void cleanSensor();
+		void readSTATE(byte *data, int ml);
 
-	NextPM(Stream &s);
-	virtual ~NextPM();
+		NextPM(Stream &s);
+		virtual ~NextPM();
 
-private:
-	ArrayTo32BInteger converter;
+	private:
+		ArrayTo32BInteger converter;
 
-	float temperature;
-	float humidity;
+		float temperature;
+		float humidity;
 
-	PM_DATA sub_data;
+		PM_DATA sub_data;
 
-	bool is_sleeping;
-	bool is_degraded;
-	bool is_ready;
-	bool is_temp_ok;
-	bool is_TRX_ok;
-	bool is_fan_ok;
-	bool is_memory_ok;
-	bool is_laser_ok;
+		bool is_sleeping;
+		bool is_degraded;
+		bool is_ready;
+		bool is_temp_ok;
+		bool is_TRX_ok;
+		bool is_fan_ok;
+		bool is_memory_ok;
+		bool is_laser_ok;
 
-	CommandResponse readData();
+		CommandResponse readData();
 
-	void readPM(byte *data, int ml);
-	void readTempHumidity(byte *data, int ml);
+		void readPM(byte *data, int ml);
+		void readTempHumidity(byte *data, int ml);
 
-	uint16_t CRC(byte *, int);
-	bool checkCRC(byte *buf, int len);
+		uint16_t CRC(byte *, int);
+		bool checkCRC(byte *buf, int len);
 
-	void transcodeData(PM_DATA &data);
-	void emptyBuffer();
+		void transcodeData(PM_DATA &data);
+		void emptyBuffer();
 };
 
 #endif /* NEXTPM_H_ */

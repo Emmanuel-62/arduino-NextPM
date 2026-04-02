@@ -17,7 +17,7 @@ PM_Sensor::PM_Sensor(Stream& serial)
 	hstream = &serial;
 }
 
-/*
+
 bool PM_Sensor::read_1min(PM_DATA & data)
 {
 	PM_DATA tmp = readDuring(60000);
@@ -54,9 +54,9 @@ bool PM_Sensor::read_5min(PM_DATA & data){
 	data.PM_UG_2_5 = tmp.PM_UG_2_5;
 	return true;
 }
-*/
 
-/*
+
+
 PM_DATA   PM_Sensor::readDuring(long delay)
 {
 	unsigned long start = millis();
@@ -95,4 +95,3 @@ PM_DATA   PM_Sensor::readDuring(long delay)
 	return data;
 
 }
-*/

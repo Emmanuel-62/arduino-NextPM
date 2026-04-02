@@ -16,13 +16,15 @@ float p1 = 0, p10 = 0,  p25 = 0;
 
 //load Next-PM sensor
 NextPM pm_sensor(SerialPMS);
+NextPM_RS485 pm(Serial1, 1, 22);   // Serial1, slaveId=1, RE/DE sur D8
 
 //store data at each measure
 PM_DATA data;
 
 void setup() {
   //open stream to print data on console
-  Serial.begin(9600);
+  Serial.begin(115200);
+  Serial1.begin(115200, SERIAL_8E1);
   
   //Configure pm sensor
   pm_sensor.configure();

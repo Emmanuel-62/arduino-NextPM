@@ -16,7 +16,6 @@ float p1 = 0, p10 = 0,  p25 = 0;
 
 //load Next-PM sensor
 NextPM pm_sensor(SerialPMS);
-NextPM_RS485 pm(Serial1, 1, 22);   // Serial1, slaveId=1, RE/DE sur D8
 
 //store data at each measure
 PM_DATA data;

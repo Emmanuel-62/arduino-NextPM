@@ -38,13 +38,13 @@ public:
   bool read_10sec(PM_DATA &);
   bool read_5min(PM_DATA &);
 
-  PM_DATA readDuring(long delay);
+  PM_DATA readDuring(long );
 
   PM_Sensor(Stream &);
 
   virtual ~PM_Sensor() = default;
 
 protected:
-  Stream *hstream;
+  Stream * hstream;
 };
 #endif // PM_Sensor

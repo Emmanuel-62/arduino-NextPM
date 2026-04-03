@@ -18,8 +18,8 @@ public:
     /**
      *
      */
-    NextPM_RS485(HardwareSerial &serial, uint8_t slaveId, int reDePin);
-    NextPM_RS485(HardwareSerial &serial, uint8_t slaveId, int dePin, int rePin);
+    NextPM_RS485(HardwareSerial &, uint8_t , int );
+    NextPM_RS485(HardwareSerial &, uint8_t , int , int );
 
     /**
      *
@@ -35,14 +35,14 @@ public:
     void configure();
     bool shutdown();
     bool powerOn();
-    bool read(PM_DATA &data);
+    bool read(PM_DATA &);
     void cleanSensor();
 
     // ==========================================================================
-    // Méthodes imposées par PM_Sensor
+    // 
     // ==========================================================================
-    bool readStatus(uint16_t &statusWord);
-    bool readFirmwareVersion(uint16_t &version);
+    bool readStatus(uint16_t &);
+    bool readFirmwareVersion(uint16_t &);
 
     // ==========================================================================
     // Méthodes imposées par PM_Sensor
@@ -50,13 +50,19 @@ public:
     /**
      *
      */
-    bool read_10sec_rs485(PM_DATA &data);
-    bool read_1min_rs485(PM_DATA &data);
-    bool read_15min_rs485(PM_DATA &data);
+    bool read_10sec_rs485(PM_DATA &);
+    bool read_1min_rs485(PM_DATA &);
+    bool read_15min_rs485(PM_DATA &);
+
+    // ==========================================================================
+    // 
+    // ==========================================================================
+    bool readHumidity(float & );
+    bool readTemperature(float & );
 
 private:
     ModbusRTUMaster _modbus;
-    HardwareSerial &_serial;
+    HardwareSerial & _serial;
 
     uint8_t _slaveId;
     int _rePin;
@@ -78,8 +84,8 @@ private:
      *
      */
     void combinePM(uint16_t, uint16_t, float &) const;
-    uint8_t readHoldingRegisters(uint16_t startReg, uint16_t *reg, uint8_t numRegs);
-    const char *modbusErrorToString(uint8_t error) const;
+    uint8_t readHoldingRegisters(uint16_t , uint16_t *, uint8_t );
+    const char *modbusErrorToString(uint8_t ) const;
 };
 
 #endif // NEXTPM_RS485_H

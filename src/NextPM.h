@@ -10,9 +10,7 @@
 #define NEXTPM_H_
 
 #include "PM_Sensor.h"
-
-#define NEXTPM_BAUD 115200
-#define NEXT_PM_COMMAND_DELAY 500
+#include "NextPM_config.h"
 
 class NextPM : public PM_Sensor
 {

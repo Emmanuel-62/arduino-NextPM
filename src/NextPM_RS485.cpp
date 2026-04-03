@@ -27,6 +27,9 @@ NextPM_RS485::NextPM_RS485(HardwareSerial &serial, uint8_t slaveId, int dePin, i
     sub_data.PM_PPM_10_0 = 0.0f;
 }
 
+/**
+ *
+ */
 NextPM_RS485::NextPM_RS485(HardwareSerial &serial, uint8_t slaveId, int reDePin) : PM_Sensor(serial),
                                                                                    _serial(serial),
                                                                                    _slaveId(slaveId),
@@ -65,13 +68,16 @@ NextPM_RS485::~NextPM_RS485()
 void NextPM_RS485::configure()
 {
     if (this->_rePin >= 0)
+    {
         pinMode(this->_rePin, OUTPUT);
-    if (this->_dePin >= 0)
-        pinMode(this->_dePin, OUTPUT);
-    if (this->_rePin >= 0)
         digitalWrite(this->_rePin, LOW);
+    }
+
     if (this->_dePin >= 0)
+    {
+        pinMode(this->_dePin, OUTPUT);
         digitalWrite(this->_dePin, LOW);
+    }
 
     this->_serial.begin(NEXTPM_BAUD, NEXTPM_PARITY);
     this->_modbus.begin(NEXTPM_BAUD, NEXTPM_PARITY);
@@ -93,6 +99,24 @@ bool NextPM_RS485::read(PM_DATA &data)
 bool NextPM_RS485::shutdown() { return false; }
 bool NextPM_RS485::powerOn() { return false; }
 void NextPM_RS485::cleanSensor() {}
+
+// ================================================================================================
+//
+// ================================================================================================
+/**
+ *
+ */
+bool NextPM_RS485::readFirmwareVersion(uint16_t & version){
+    return this->_modbus.readHoldingRegisters(this->_slaveId, 1, &version, 1) == 0;
+}
+/**
+ *
+ */
+bool NextPM_RS485::readStatus(uint16_t & statusWord)
+{
+    return this->_modbus.readHoldingRegisters(this->_slaveId, 19, &statusWord, 1) == 0;
+}
+
 // ================================================================================================
 //
 // ================================================================================================
@@ -152,15 +176,52 @@ bool NextPM_RS485::read_15min_rs485(PM_DATA &data)
 
     return true;
 }
+
+// ================================================================================================
+//
+// ================================================================================================
+/**
+ *
+ */
+bool NextPM_RS485::readHumidity(float & humidity){
+    uint16_t raw = 0;
+    if(this->_modbus.readHoldingRegisters(this->_slaveId, &raw, 106, 1) != 0) {
+        return false;
+    }
+
+    humidity = raw / 100.0f;
+    this->_humidity = humidity;
+    return true;
+}
+
+/**
+ *
+ */
+bool NextPM_RS485::readTemperature(float & temperature){
+    uint16_t raw = 0;
+    if(this->_modbus.readHoldingRegisters(this->_slaveId, &raw, 107, 1) != 0){
+        return false;
+    }
+    temperature = raw / 100.0f;
+    this->_temperature = temperature;
+    return true;
+}
+
 // ================================================================================================
 // Outils Modbus
 // ================================================================================================
+/**
+ *
+ */
 void NextPM_RS485::combinePM(uint16_t regLow, uint16_t regHigh, float &pmValue) const
 {
     uint32_t raw = ((uint32_t)regHigh << 16) | regLow;
     pmValue = raw / 1000.0f;
 }
 
+/**
+ *
+ */
 uint8_t NextPM_RS485::readHoldingRegisters(uint16_t startReg, uint16_t *regs, uint8_t numRegs)
 {
     if (regs == nullptr)
@@ -169,11 +230,9 @@ uint8_t NextPM_RS485::readHoldingRegisters(uint16_t startReg, uint16_t *regs, ui
     return this->_modbus.readHoldingRegisters(this->_slaveId, startReg, regs, numRegs);
 }
 
-bool NextPM_RS485::readStatus(uint16_t &statusWord)
-{
-    return this->_modbus.readHoldingRegisters(this->_slaveId, 19, &statusWord, 1) == 0;
-}
-
+/**
+ *
+ */
 const char *NextPM_RS485::modbusErrorToString(uint8_t error) const
 {
     switch (error)
